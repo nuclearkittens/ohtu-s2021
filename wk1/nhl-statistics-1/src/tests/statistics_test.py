@@ -23,6 +23,13 @@ class TestStatistics(unittest.TestCase):
         expected = [plr.name for plr in self.plrs]
         self.assertEqual(plrs, expected)
 
+    def test_search_returns_player(self):
+        name = 'Kurri'
+        self.assertEqual(self.stats.search(name).name, name)
+
+    def test_search_returns_none(self):
+        self.assertIsNone(self.stats.search('UKK'))
+
     def test_returns_right_team_amt(self):
         edm = self.stats.team('EDM')
         pit = self.stats.team('PIT')
