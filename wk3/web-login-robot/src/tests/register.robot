@@ -34,6 +34,20 @@ Register With Nonmatching Password And Password Confirmation
     Register New User
     Registering Should Fail With Message  Password confirmation does not match password
 
+Login After Successful Registration
+    Choose Username  kalle
+    Choose Password  kalle123
+    Confirm Password  kalle123
+    Register New User
+    Logging In New User Should Succeed  kalle  kalle123
+
+Login After Failed Registration
+    Choose Username  nuuskis
+    Choose Password  teltta1
+    Confirm Password  teltta1
+    Register New User
+    Login Should Fail After Failed Registration  nuuskis  teltta1
+
 *** Keywords ***
 Registering Should Succeed
     Welcome Page Should Be Open
@@ -45,6 +59,22 @@ Registering Should Fail With Message
 
 Register New User
     Click Button  Register
+
+Logging In New User Should Succeed
+    [Arguments]  ${username}  ${password}
+    Go To Login Page
+    Input Text  username  ${username}
+    Input Password  password  ${password}
+    Click Button  Login
+    Main Page Should Be Open
+
+Login Should Fail After Failed Registration
+    [Arguments]  ${username}  ${password}
+    Go To Login Page
+    Input Text  username  ${username}
+    Input Password  password  ${password}
+    Click Button  Login
+    Login Page Should Be Open
 
 Choose Username
     [Arguments]  ${username}
