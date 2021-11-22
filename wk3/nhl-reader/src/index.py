@@ -1,12 +1,13 @@
 import requests
+from time import strftime, localtime
 from player import Player
 
 def main():
     url = "https://nhlstatisticsforohtu.herokuapp.com/players"
     response = requests.get(url).json()
 
-    print("JSON-muotoinen vastaus:")
-    print(response)
+    # print("JSON-muotoinen vastaus:")
+    # print(response)
 
     players = []
 
@@ -19,9 +20,11 @@ def main():
 
             players.append(player)
 
-    print("Oliot:")
+    print(f"Players from FIN {strftime('%Y-%m-%d %H:%M:%S', localtime())}")
 
-    for player in players:
+    plrs_sorted = sorted(players, key=lambda player: (player.goals+player.assists, player.goals), reverse=True)
+
+    for player in plrs_sorted:
         print(player)
 
 if __name__ == "__main__":
