@@ -4,7 +4,8 @@ OLETUSKASVATUS = 5
 class IntJoukko:
     def __init__(self, kapasiteetti=KAPASITEETTI, kasvatuskoko=OLETUSKASVATUS):
         if not isinstance(kapasiteetti, int) or kapasiteetti < 0:
-            raise ValueError("Kapasiteetin on oltava positiivinen kokonaisluku")
+            raise ValueError(
+                "Kapasiteetin on oltava positiivinen kokonaisluku")
         else:
             self.kapasiteetti = kapasiteetti
 
@@ -29,7 +30,7 @@ class IntJoukko:
             return True
         elif not self.kuuluu_joukkoon(n):
             if len(self._lukujono) == lkm:
-                self.kasvata_taulukkoa()
+                self._kasvata_taulukkoa()
             self._lukujono[lkm] = n
             return True
 
@@ -40,10 +41,10 @@ class IntJoukko:
             self._lukujono.remove(n)
             self._lukujono.append(float('inf'))
             return True
-        
+
         return False
 
-    def kasvata_taulukkoa(self):
+    def _kasvata_taulukkoa(self):
         for i in range(self.kasvatuskoko):
             self._lukujono.append(float('inf'))
 
@@ -55,17 +56,17 @@ class IntJoukko:
 
     @staticmethod
     def yhdiste(a, b):
-        x = IntJoukko()
+        yhdiste = IntJoukko()
         a_taulu = a.lukujono()
         b_taulu = b.lukujono()
 
         for i in range(0, len(a_taulu)):
-            x.lisaa_alkio(a_taulu[i])
+            yhdiste.lisaa_alkio(a_taulu[i])
 
         for i in range(0, len(b_taulu)):
-            x.lisaa_alkio(b_taulu[i])
+            yhdiste.lisaa_alkio(b_taulu[i])
 
-        return x
+        return yhdiste
 
     @staticmethod
     def leikkaus(a, b):
@@ -95,15 +96,18 @@ class IntJoukko:
         return z
 
     def __str__(self):
-        if self.alkioiden_lkm == 0:
-            return "{}"
-        elif self.alkioiden_lkm == 1:
-            return "{" + str(self._lukujono[0]) + "}"
-        else:
-            tuotos = "{"
-            for i in range(0, self.alkioiden_lkm - 1):
-                tuotos = tuotos + str(self._lukujono[i])
-                tuotos = tuotos + ", "
-            tuotos = tuotos + str(self._lukujono[self.alkioiden_lkm - 1])
-            tuotos = tuotos + "}"
-            return tuotos
+        jono = self.lukujono()
+        s = ', '.join((str(x) for x in jono))
+        return f"{{{s}}}"
+        # if self.alkioiden_lkm == 0:
+        #     return "{}"
+        # elif self.alkioiden_lkm == 1:
+        #     return "{" + str(self._lukujono[0]) + "}"
+        # else:
+        #     tuotos = "{"
+        #     for i in range(0, self.alkioiden_lkm - 1):
+        #         tuotos = tuotos + str(self._lukujono[i])
+        #         tuotos = tuotos + ", "
+        #     tuotos = tuotos + str(self._lukujono[self.alkioiden_lkm - 1])
+        #     tuotos = tuotos + "}"
+        #     return tuotos

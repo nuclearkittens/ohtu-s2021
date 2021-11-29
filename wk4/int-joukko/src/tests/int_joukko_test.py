@@ -8,16 +8,17 @@ class TestIntJoukko(unittest.TestCase):
         self.joukko.lisaa_alkio(10)
         self.joukko.lisaa_alkio(3)
 
-    def luo_joukko(self, *luvut):
+    def luo_joukko(self, luvut):
         joukko = IntJoukko()
-
-        for luku in luvut:
-            joukko.lisaa_alkio(luku)
-
+        self.kasvata_joukkoa(joukko, luvut)
         return joukko
 
+    def kasvata_joukkoa(self, joukko, lisattavat):
+        for luku in lisattavat:
+            joukko.lisaa_alkio(luku)
+
     def toimii_kasvatuksen_jalkeen(self, joukko):
-        lisattavat = [1, 2, 4, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+        lisattavat = list(range(1, 15))
 
         for luku in lisattavat:
             joukko.lisaa_alkio(luku)
@@ -80,8 +81,8 @@ class TestIntJoukko(unittest.TestCase):
         self.assertEqual(str(joukko), "{}")
 
     def test_yhdiste(self):
-        eka = self.luo_joukko(1, 2)
-        toka = self.luo_joukko(3, 4)
+        eka = self.luo_joukko([1, 2])
+        toka = self.luo_joukko([3, 4])
 
         tulos = IntJoukko.yhdiste(eka, toka)
         vastauksen_luvut = tulos.lukujono()
@@ -91,8 +92,8 @@ class TestIntJoukko(unittest.TestCase):
         self.assertListEqual(sorted(vastauksen_luvut), odotettu)
 
     def test_leikkaus(self):
-        eka = self.luo_joukko(1, 2)
-        toka = self.luo_joukko(2, 3, 4)
+        eka = self.luo_joukko([1, 2])
+        toka = self.luo_joukko([2, 3, 4])
 
         tulos = IntJoukko.leikkaus(eka, toka)
         vastauksen_luvut = tulos.lukujono()
@@ -102,8 +103,8 @@ class TestIntJoukko(unittest.TestCase):
         self.assertListEqual(sorted(vastauksen_luvut), odotettu)
 
     def test_erotus(self):
-        eka = self.luo_joukko(1, 2, 5, 6)
-        toka = self.luo_joukko(2, 3, 4)
+        eka = self.luo_joukko([1, 2, 5, 6])
+        toka = self.luo_joukko([2, 3, 4])
 
         tulos = IntJoukko.erotus(eka, toka)
         vastauksen_luvut = tulos.lukujono()
