@@ -73,3 +73,33 @@ class TestKauppa(unittest.TestCase):
         self.kauppa.tilimaksu('merz', '112358')
 
         self.pankki_mock.tilisiirto.assert_called_with('merz', 127, '112358', ANY, 4)
+
+    def test_aloita_asiointi_nollaa_aiemmat_tiedot(self):
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.aloita_asiointi()
+        self.kauppa.tilimaksu('merz', '112358')
+
+        self.pankki_mock.tilisiirto.assert_called_with(ANY, ANY, ANY, ANY, 0)
+
+    def test_uusi_viitenro_joka_ostokselle(self):
+        self.viitegeneraattori_mock.uusi.side_effect = [1, 2, 3]
+
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.tilimaksu('merz', '112358')
+
+        self.pankki_mock.tilisiirto.assert_called_with('merz', 1, '112358', ANY, 4)
+
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(2)
+        self.kauppa.tilimaksu('merz', '112358')
+
+        self.pankki_mock.tilisiirto.assert_called_with('merz', 2, '112358', ANY, 7)
+
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.lisaa_koriin(3)
+        self.kauppa.tilimaksu('merz', '112358')
+
+        self.pankki_mock.tilisiirto.assert_called_with('merz', 3, '112358', ANY, 4)
