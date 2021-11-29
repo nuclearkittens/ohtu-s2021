@@ -9,93 +9,88 @@ class IntJoukko:
             self.kapasiteetti = kapasiteetti
 
         self.kasvatuskoko = kasvatuskoko
-        self.lukujono = [float('inf') for _ in range(self.kapasiteetti)]
+        self._lukujono = [float('inf') for _ in range(self.kapasiteetti)]
 
     def kuuluu_joukkoon(self, n):
-        return True if n in self.lukujono else False
+        return True if n in self._lukujono else False
 
     def _alkioiden_lkm(self):
         try:
-            lkm = self.lukujono.index(float('inf'))
+            lkm = self._lukujono.index(float('inf'))
         except ValueError:
-            lkm = len(self.lukujono)
+            lkm = len(self._lukujono)
         return lkm
 
-    def lisaa_joukkoon(self, n):
+    def lisaa_alkio(self, n):
         lkm = self._alkioiden_lkm()
 
         if not lkm:
-            self.lukujono[0] = n
+            self._lukujono[0] = n
             return True
         elif not self.kuuluu_joukkoon(n):
-            if len(self.lukujono) == lkm:
+            if len(self._lukujono) == lkm:
                 self.kasvata_taulukkoa()
-            self.lukujono[lkm] = n
+            self._lukujono[lkm] = n
             return True
 
         return False
 
-    def poista(self, n):
+    def poista_alkio(self, n):
         if self.kuuluu_joukkoon(n):
-            self.lukujono.remove(n)
-            self.lukujono.append(float('inf'))
+            self._lukujono.remove(n)
+            self._lukujono.append(float('inf'))
             return True
         
         return False
 
     def kasvata_taulukkoa(self):
         for i in range(self.kasvatuskoko):
-            self.lukujono.append(float('inf'))
+            self._lukujono.append(float('inf'))
 
     def mahtavuus(self):
         return self._alkioiden_lkm()
 
-    def to_int_list(self):
-        taulu = [0] * self.alkioiden_lkm
-
-        for i in range(0, len(taulu)):
-            taulu[i] = self.lukujono[i]
-
-        return taulu
+    def lukujono(self):
+        return [x for x in self._lukujono if x != float('inf')]
 
     @staticmethod
     def yhdiste(a, b):
         x = IntJoukko()
-        a_taulu = a.to_int_list()
-        b_taulu = b.to_int_list()
+        a_taulu = a.lukujono()
+        b_taulu = b.lukujono()
 
         for i in range(0, len(a_taulu)):
-            x.lisaa_joukkoon(a_taulu[i])
+            x.lisaa_alkio(a_taulu[i])
 
         for i in range(0, len(b_taulu)):
-            x.lisaa_joukkoon(b_taulu[i])
+            x.lisaa_alkio(b_taulu[i])
 
         return x
 
     @staticmethod
     def leikkaus(a, b):
         y = IntJoukko()
-        a_taulu = a.to_int_list()
-        b_taulu = b.to_int_list()
+        a_taulu = a.lukujono()
+        b_taulu = b.lukujono()
 
         for i in range(0, len(a_taulu)):
             for j in range(0, len(b_taulu)):
                 if a_taulu[i] == b_taulu[j]:
-                    y.lisaa_joukkoon(b_taulu[j])
+                    y.lisaa_alkio(b_taulu[j])
 
         return y
 
     @staticmethod
     def erotus(a, b):
         z = IntJoukko()
-        a_taulu = a.to_int_list()
-        b_taulu = b.to_int_list()
+        a_taulu = a.lukujono()
+        b_taulu = b.lukujono()
 
         for i in range(0, len(a_taulu)):
-            z.lisaa_joukkoon(a_taulu[i])
+            z.lisaa_alkio(a_taulu[i])
 
         for i in range(0, len(b_taulu)):
-            z.poista(b_taulu[i])
+            z.poista_alkio(b_taulu[i])
 
         return z
 
@@ -103,12 +98,12 @@ class IntJoukko:
         if self.alkioiden_lkm == 0:
             return "{}"
         elif self.alkioiden_lkm == 1:
-            return "{" + str(self.lukujono[0]) + "}"
+            return "{" + str(self._lukujono[0]) + "}"
         else:
             tuotos = "{"
             for i in range(0, self.alkioiden_lkm - 1):
-                tuotos = tuotos + str(self.lukujono[i])
+                tuotos = tuotos + str(self._lukujono[i])
                 tuotos = tuotos + ", "
-            tuotos = tuotos + str(self.lukujono[self.alkioiden_lkm - 1])
+            tuotos = tuotos + str(self._lukujono[self.alkioiden_lkm - 1])
             tuotos = tuotos + "}"
             return tuotos
