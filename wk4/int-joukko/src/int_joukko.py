@@ -10,62 +10,45 @@ class IntJoukko:
 
         self.kasvatuskoko = kasvatuskoko
         self.lukujono = [float('inf') for _ in range(self.kapasiteetti)]
-        self.alkioiden_lkm = 0
 
     def kuuluu_joukkoon(self, n):
         return True if n in self.lukujono else False
 
-    def lisaa(self, n):
-        ei_ole = 0
+    def _alkioiden_lkm(self):
+        try:
+            lkm = self.lukujono.index(float('inf'))
+        except ValueError:
+            lkm = len(self.lukujono)
+        return lkm
 
-        if self.alkioiden_lkm == 0:
+    def lisaa_joukkoon(self, n):
+        lkm = self._alkioiden_lkm()
+
+        if not lkm:
             self.lukujono[0] = n
-            self.alkioiden_lkm = self.alkioiden_lkm + 1
             return True
-        else:
-            pass
-
-        if not self.kuuluu_joukkoon(n):
-            self.lukujono[self.alkioiden_lkm] = n
-            self.alkioiden_lkm = self.alkioiden_lkm + 1
-
-            if self.alkioiden_lkm % len(self.lukujono) == 0:
-                taulukko_old = self.lukujono
-                self.kopioi_taulukko(self.lukujono, taulukko_old)
-                self.lukujono = [0] * (self.alkioiden_lkm + self.kasvatuskoko)
-                self.kopioi_taulukko(taulukko_old, self.lukujono)
-
+        elif not self.kuuluu_joukkoon(n):
+            if len(self.lukujono) == lkm:
+                self.kasvata_taulukkoa()
+            self.lukujono[lkm] = n
             return True
 
         return False
 
     def poista(self, n):
-        kohta = -1
-        apu = 0
-
-        for i in range(0, self.alkioiden_lkm):
-            if n == self.lukujono[i]:
-                kohta = i  # siis luku löytyy tuosta kohdasta :D
-                self.lukujono[kohta] = 0
-                break
-
-        if kohta != -1:
-            for j in range(kohta, self.alkioiden_lkm - 1):
-                apu = self.lukujono[j]
-                self.lukujono[j] = self.lukujono[j + 1]
-                self.lukujono[j + 1] = apu
-
-            self.alkioiden_lkm = self.alkioiden_lkm - 1
+        if self.kuuluu_joukkoon(n):
+            self.lukujono.remove(n)
+            self.lukujono.append(float('inf'))
             return True
-
+        
         return False
 
-    def kopioi_taulukko(self, a, b):
-        for i in range(0, len(a)):
-            b[i] = a[i]
+    def kasvata_taulukkoa(self):
+        for i in range(self.kasvatuskoko):
+            self.lukujono.append(float('inf'))
 
     def mahtavuus(self):
-        return self.alkioiden_lkm
+        return self._alkioiden_lkm()
 
     def to_int_list(self):
         taulu = [0] * self.alkioiden_lkm
@@ -82,10 +65,10 @@ class IntJoukko:
         b_taulu = b.to_int_list()
 
         for i in range(0, len(a_taulu)):
-            x.lisaa(a_taulu[i])
+            x.lisaa_joukkoon(a_taulu[i])
 
         for i in range(0, len(b_taulu)):
-            x.lisaa(b_taulu[i])
+            x.lisaa_joukkoon(b_taulu[i])
 
         return x
 
@@ -98,7 +81,7 @@ class IntJoukko:
         for i in range(0, len(a_taulu)):
             for j in range(0, len(b_taulu)):
                 if a_taulu[i] == b_taulu[j]:
-                    y.lisaa(b_taulu[j])
+                    y.lisaa_joukkoon(b_taulu[j])
 
         return y
 
@@ -109,7 +92,7 @@ class IntJoukko:
         b_taulu = b.to_int_list()
 
         for i in range(0, len(a_taulu)):
-            z.lisaa(a_taulu[i])
+            z.lisaa_joukkoon(a_taulu[i])
 
         for i in range(0, len(b_taulu)):
             z.poista(b_taulu[i])

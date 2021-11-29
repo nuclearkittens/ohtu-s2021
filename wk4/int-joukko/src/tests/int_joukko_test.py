@@ -5,14 +5,14 @@ from int_joukko import IntJoukko
 class TestIntJoukko(unittest.TestCase):
     def setUp(self):
         self.joukko = IntJoukko()
-        self.joukko.lisaa(10)
-        self.joukko.lisaa(3)
+        self.joukko.lisaa_joukkoon(10)
+        self.joukko.lisaa_joukkoon(3)
 
     def tee_joukko(self, *luvut):
         joukko = IntJoukko()
 
         for luku in luvut:
-            joukko.lisaa(luku)
+            joukko.lisaa_joukkoon(luku)
 
         return joukko
 
@@ -20,7 +20,7 @@ class TestIntJoukko(unittest.TestCase):
         lisattavat = [1, 2, 4, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 
         for luku in lisattavat:
-            joukko.lisaa(luku)
+            joukko.lisaa_joukkoon(luku)
 
         self.assertEqual(joukko.mahtavuus(), 14)
         self.assertTrue(joukko.kuuluu_joukkoon(11))
@@ -29,12 +29,12 @@ class TestIntJoukko(unittest.TestCase):
         self.assertEqual(joukko.mahtavuus(), 13)
 
     def test_lukuja_lisatty_maara(self):
-        self.joukko.lisaa(4)
+        self.joukko.lisaa_joukkoon(4)
         self.assertEqual(self.joukko.mahtavuus(), 3)
 
     def test_sama_luku_menee_joukkoon_vaan_kerran(self):
-        self.joukko.lisaa(10)
-        self.joukko.lisaa(3)
+        self.joukko.lisaa_joukkoon(10)
+        self.joukko.lisaa_joukkoon(3)
         self.assertEqual(self.joukko.mahtavuus(), 2)
 
     def test_vain_lisatyt_luvut_loytyvat(self):
@@ -50,9 +50,9 @@ class TestIntJoukko(unittest.TestCase):
     def test_palautetaan_oikea_taulukko(self):
         odotettu = [3, 55, 99]
 
-        self.joukko.lisaa(55)
+        self.joukko.lisaa_joukkoon(55)
         self.joukko.poista(10)
-        self.joukko.lisaa(99)
+        self.joukko.lisaa_joukkoon(99)
 
         vastaus = self.joukko.to_int_list()
 
@@ -72,7 +72,7 @@ class TestIntJoukko(unittest.TestCase):
 
     def test_merkkijonoesitys_toimii_yhden_kokeisella_joukolla(self):
         joukko = IntJoukko()
-        joukko.lisaa(1)
+        joukko.lisaa_joukkoon(1)
         self.assertEqual(str(joukko), "{1}")
 
     def test_merkkijonoesitys_toimii_tyhjalla_joukolla(self):
