@@ -60,54 +60,38 @@ class IntJoukko:
         a_taulu = a.lukujono()
         b_taulu = b.lukujono()
 
-        for i in range(0, len(a_taulu)):
-            yhdiste.lisaa_alkio(a_taulu[i])
+        temp = list(set(a_taulu + b_taulu))
 
-        for i in range(0, len(b_taulu)):
-            yhdiste.lisaa_alkio(b_taulu[i])
+        for alkio in temp:
+            yhdiste.lisaa_alkio(alkio)
 
         return yhdiste
 
     @staticmethod
     def leikkaus(a, b):
-        y = IntJoukko()
+        leikkaus = IntJoukko()
         a_taulu = a.lukujono()
         b_taulu = b.lukujono()
 
-        for i in range(0, len(a_taulu)):
-            for j in range(0, len(b_taulu)):
-                if a_taulu[i] == b_taulu[j]:
-                    y.lisaa_alkio(b_taulu[j])
+        yhdiste = IntJoukko.yhdiste(a, b).lukujono()
 
-        return y
+        for alkio in yhdiste:
+            if alkio in a_taulu and alkio in b_taulu:
+                leikkaus.lisaa_alkio(alkio)
+
+        return leikkaus
 
     @staticmethod
     def erotus(a, b):
-        z = IntJoukko()
-        a_taulu = a.lukujono()
+        erotus = IntJoukko.yhdiste(a, b)
         b_taulu = b.lukujono()
 
-        for i in range(0, len(a_taulu)):
-            z.lisaa_alkio(a_taulu[i])
+        for alkio in b_taulu:
+            erotus.poista_alkio(alkio)
 
-        for i in range(0, len(b_taulu)):
-            z.poista_alkio(b_taulu[i])
-
-        return z
+        return erotus
 
     def __str__(self):
         jono = self.lukujono()
         s = ', '.join((str(x) for x in jono))
         return f"{{{s}}}"
-        # if self.alkioiden_lkm == 0:
-        #     return "{}"
-        # elif self.alkioiden_lkm == 1:
-        #     return "{" + str(self._lukujono[0]) + "}"
-        # else:
-        #     tuotos = "{"
-        #     for i in range(0, self.alkioiden_lkm - 1):
-        #         tuotos = tuotos + str(self._lukujono[i])
-        #         tuotos = tuotos + ", "
-        #     tuotos = tuotos + str(self._lukujono[self.alkioiden_lkm - 1])
-        #     tuotos = tuotos + "}"
-        #     return tuotos
