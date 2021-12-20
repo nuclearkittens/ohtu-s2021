@@ -32,7 +32,7 @@ class RPSGame:
         return move in [ROCK, PAPER, SCISSORS]
 
     def _move_p2(self, move_p1):
-        pass
+        return ROCK
 
     def _reset(self):
         self._pts.reset()
