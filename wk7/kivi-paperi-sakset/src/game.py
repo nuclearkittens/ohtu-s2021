@@ -7,7 +7,7 @@ from rps_ai import SimpleAI, SmarterAI
 
 class RPSGame:
     def __init__(self, io, ai=None):
-        self._ai = None
+        self._ai = ai
         self._io = io
         self._pts = Points()
 
